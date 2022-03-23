@@ -2,10 +2,8 @@ import random
 
 
 def validate_guess(guess, ans):
-    """
-    iterates through guess and answer lists element-by-element. Whenever it finds a match,
-    removes the value from a copy of answer so that nothing is double counted.
-    """
+    # iterates through guess and answer lists element-by-element. Whenever it finds a match,
+    # removes the value from a copy of answer so that nothing is double counted.
     hints = []
     ans_temp = ans.copy()
     for i, (guess_elem, ans_elem) in enumerate(zip(guess, ans_temp)):
@@ -39,7 +37,7 @@ while True:
 
         hints = "".join(validate_guess(guess, answer))
         if hints == "BBBBB":
-            print(hints)
+            print(hints, "\n")
             print(f"You win! Well done! Answer was {answer_str}")
             while True:
                 restart_q = input("Do you want to play again? (Y \\ N): ")
@@ -51,7 +49,7 @@ while True:
         else:
             guesses_remaining -= 1
             if guesses_remaining == 0:
-                print(hints)
+                print(hints, "\n")
                 print(f"You lose! Correct answer: {answer_str}")
                 while True:
                     restart_q = input("Do you want to play again? (Y \\ N): ")
@@ -61,5 +59,5 @@ while True:
                     elif restart_q == "N":
                         exit()
             else:
-                print(hints)
+                print(hints, "\n")
                 print(f"Guesses Remaining: {guesses_remaining}")
