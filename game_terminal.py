@@ -10,7 +10,8 @@ def validate_guess(guess, ans):
         if guess_elem == ans_elem:
             hints.append("B")
             ans_temp[i] = "USED"
-        elif guess_elem in ans_temp:
+    for guess_elem, ans_elem in zip(guess, ans_temp):
+        if guess_elem in ans_temp:
             hints.append("W")
             ans_temp[ans_temp.index(guess_elem)] = "USED"
 

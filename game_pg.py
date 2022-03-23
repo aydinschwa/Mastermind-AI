@@ -99,11 +99,16 @@ def validate_guess(guess, ans):
     # removes the value from a copy of answer so that nothing is double counted.
     hints = []
     ans_temp = ans.copy()
+    print(guess, ans_temp)
+    # first pass for black pegs
     for i, (guess_elem, ans_elem) in enumerate(zip(guess, ans_temp)):
         if guess_elem == ans_elem:
             hints.append("Black")
             ans_temp[i] = ""
-        elif guess_elem in ans_temp:
+
+    # second pass for white pegs
+    for guess_elem, ans_elem in zip(guess, ans_temp):
+        if guess_elem in ans_temp:
             hints.append("White")
             ans_temp[ans_temp.index(guess_elem)] = ""
         else:
@@ -143,6 +148,9 @@ while True:
 
                     if guess == ANSWER:
                         print("HORRAY HOORAH")
+
+                    elif guess != ANSWER and GUESSES_LEFT == 0:
+                        print(ANSWER)
 
         # changing color choices before submitting
         if event.type == pg.KEYDOWN:
