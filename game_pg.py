@@ -1,6 +1,3 @@
-import pygame as pg
-import random
-import sys
 from setup import *
 from solver import MastermindSolver
 
@@ -20,7 +17,7 @@ class Mastermind:
             for val in row:
                 SCREEN.blit(pg.transform.scale(HOLE_BACKGROUND, (40, 40)), (grid_x - 20, grid_y - 20))
                 if val:
-                    pg.draw.circle(SCREEN, COLOR_MAP[val], (grid_x, grid_y), GUESS_RADIUS)
+                    pg.draw.circle(SCREEN, GUESS_COLOR_MAP[val], (grid_x, grid_y), GUESS_RADIUS)
                 grid_x += 60
             grid_y += 110
 
@@ -33,17 +30,17 @@ class Mastermind:
                 if i in (0, 1):
                     SCREEN.blit(pg.transform.scale(HOLE_BACKGROUND, (30, 30)), (grid_x - 15, grid_y - 15))
                     if val:
-                        pg.draw.circle(SCREEN, COLOR_MAP[val], (grid_x, grid_y), HINT_RADIUS)
+                        pg.draw.circle(SCREEN, HINT_COLOR_MAP[val], (grid_x, grid_y), HINT_RADIUS)
                     grid_x += 60
                 elif i == 2:
                     SCREEN.blit(pg.transform.scale(HOLE_BACKGROUND, (30, 30)), (grid_x - 90 - 15, grid_y + 30 - 15))
                     if val:
-                        pg.draw.circle(SCREEN, COLOR_MAP[val], (grid_x - 90, grid_y + 30), HINT_RADIUS)
+                        pg.draw.circle(SCREEN, HINT_COLOR_MAP[val], (grid_x - 90, grid_y + 30), HINT_RADIUS)
                     grid_x = 55
                 elif i in (3, 4):
                     SCREEN.blit(pg.transform.scale(HOLE_BACKGROUND, (30, 30)), (grid_x - 15, grid_y + 60 - 15))
                     if val:
-                        pg.draw.circle(SCREEN, COLOR_MAP[val], (grid_x, grid_y + 60), HINT_RADIUS)
+                        pg.draw.circle(SCREEN, HINT_COLOR_MAP[val], (grid_x, grid_y + 60), HINT_RADIUS)
                     grid_x += 60
             grid_y += 110
 
@@ -53,7 +50,7 @@ class Mastermind:
         grid_x = 200
         choice_rects = []
         for val in choice_grid:
-            choice_rects.append(pg.draw.circle(SCREEN, COLOR_MAP[val], (grid_x, grid_y), GUESS_RADIUS))
+            choice_rects.append(pg.draw.circle(SCREEN, GUESS_COLOR_MAP[val], (grid_x, grid_y), GUESS_RADIUS))
             grid_x += 60
         return choice_rects
 
@@ -78,14 +75,14 @@ class Mastermind:
         # first pass for black pegs
         for i, (guess_elem, ans_elem) in enumerate(zip(guess_temp, ans_temp)):
             if guess_elem == ans_elem:
-                hints.append("Black")
+                hints.append("B")
                 ans_temp[i] = ""
                 guess_temp[i] = ""
 
         # second pass for white pegs
         for guess_elem, ans_elem in zip(guess_temp, ans_temp):
             if guess_elem in ans_temp and guess_elem:
-                hints.append("White")
+                hints.append("W")
                 ans_temp[ans_temp.index(guess_elem)] = ""
 
         if len(hints) < 5:
@@ -134,7 +131,14 @@ class Mastermind:
                             self.current_hole -= 1
                             GUESS_GRID[6 - self.guesses_left][self.current_hole] = ""
                     if event.key == pg.K_SPACE:
-                        print(MastermindSolver("".join(ANSWER)).solve())
+                        guesses, hints = MastermindSolver("".join(ANSWER)).solve()
+                        for i, (guess, hint) in enumerate(zip(guesses, hints)):
+                            hint = [let for let in hint]
+                            if len(hint) < 5:
+                                hint.extend([""] * (5 - len(hints)))
+
+                            GUESS_GRID[i] = guess
+                            HINT_GRID[i] = hint
 
             SCREEN.blit(BACKGROUND, (0, 0))
             self.draw_guess_grid(GUESS_GRID)

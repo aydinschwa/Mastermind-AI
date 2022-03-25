@@ -13,6 +13,7 @@ class MastermindSolver:
         self.all_answers = {"".join(answer) for answer in self.all_answers}
         self.guesses_left = 6
         self.guess_history = []
+        self.hint_history = []
         self.answer = answer
 
         FileStore = open("stored_objects/score_dict.pickle", "rb")
@@ -49,9 +50,10 @@ class MastermindSolver:
 
             # reduce amount of possible answers by checking answer against guess and score
             score = score_guess(guess, self.answer)
+            self.hint_history.append(score)
             self.all_answers = {answer for answer in self.all_answers
                                 if self.score_dict[guess][answer] == score}
 
             self.guesses_left -= 1
             if guess == self.answer:
-                return self.guess_history
+                return self.guess_history, self.hint_history

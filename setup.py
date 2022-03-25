@@ -1,3 +1,4 @@
+import sys
 import random
 import pygame as pg
 
@@ -18,14 +19,15 @@ HINT_GRID = [["" for _ in range(5)] for _ in range(6)]
 COLOR_CHOICES = ["R", "G", "B", "Y", "P"]
 GUESS_RADIUS = 20
 HINT_RADIUS = 15
-COLOR_MAP = {"R": (255, 0, 0),
-             "G": (0, 255, 0),
-             "B": (0, 0, 255),
-             "Y": (255, 255, 0),
-             "P": (255, 0, 255),
-             "Black": (0, 0, 0),
-             "White": (255, 255, 255),
-             "": (1, 122, 1)}
+GUESS_COLOR_MAP = {"R": (255, 0, 0),
+                   "G": (0, 255, 0),
+                   "B": (0, 0, 255),
+                   "Y": (255, 255, 0),
+                   "P": (255, 0, 255)}
+
+HINT_COLOR_MAP = {"B": (0, 0, 0),
+                  "W": (255, 255, 255),
+                  "": (1, 122, 1)}
 
 # game state globals
 ANSWER = random.choices(COLOR_CHOICES, k=5)
