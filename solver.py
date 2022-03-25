@@ -4,6 +4,9 @@ import collections
 from dict_maker import score_guess
 
 
+# this is a one-time use class at the moment since internal variables get modified.
+# copying them was too time and memory intensive, think it's better to just load
+# from stored_objects every time
 class MastermindSolver:
     def __init__(self, answer):
         self.all_answers = itertools.product(["R", "G", "B", "Y", "P"], repeat=5)
@@ -12,7 +15,6 @@ class MastermindSolver:
         self.guess_history = []
         self.answer = answer
 
-        # possible_score_dict is modified during guessing, maintain this as original
         FileStore = open("stored_objects/score_dict.pickle", "rb")
         self.score_dict = pickle.load(FileStore)
         FileStore.close()
