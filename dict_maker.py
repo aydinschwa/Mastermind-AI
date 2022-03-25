@@ -21,19 +21,19 @@ def score_guess(guess, ans):
             hints.append("W")
             ans_no_match.remove(guess_elem)
 
-    return hints
+    return "".join(hints)
 
 
-# default dict avoids storing keys as tuple, saves lookup time
-score_dict = collections.defaultdict(dict)
-all_guesses = itertools.product(["0", "1", "2", "3", "4"], repeat=5)
+if __name__ == "__main__":
+    # default dict avoids storing keys as tuple, saves lookup time
+    score_dict = collections.defaultdict(dict)
+    all_guesses = itertools.product(["R", "G", "B", "Y", "P"], repeat=5)
 
-for i, (guess, answer) in enumerate(itertools.product(all_guesses, repeat=2)):
-    guess_str = "".join(guess)
-    ans_str = "".join(answer)
-    score_str = "".join(score_guess(guess, answer))
-    score_dict[guess_str][ans_str] = score_str
+    for guess, answer in itertools.product(all_guesses, repeat=2):
+        guess_str = "".join(guess)
+        ans_str = "".join(answer)
+        score_dict[guess_str][ans_str] = score_guess(guess, answer)
 
-FileStore = open("stored_objects/score_dict.pickle", "wb")
-pickle.dump(score_dict, FileStore)
-FileStore.close()
+    FileStore = open("stored_objects/score_dict.pickle", "wb")
+    pickle.dump(score_dict, FileStore)
+    FileStore.close()

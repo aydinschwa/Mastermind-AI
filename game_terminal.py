@@ -1,7 +1,7 @@
 import random
 
 
-def score_guess(guess, ans):
+def validate_guess(guess, ans):
     # iterates through guess and answer lists element-by-element. Whenever it finds a match,
     # removes the value from a copy of answer so that nothing is double counted.
     hints = []
