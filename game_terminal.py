@@ -1,21 +1,23 @@
 import random
 
 
-def validate_guess(guess, ans):
+def score_guess(guess, ans):
     # iterates through guess and answer lists element-by-element. Whenever it finds a match,
     # removes the value from a copy of answer so that nothing is double counted.
     hints = []
-    ans_temp = ans.copy()
-    for i, (guess_elem, ans_elem) in enumerate(zip(guess, ans_temp)):
+    ans_no_match = []
+    guess_no_match = []
+    for guess_elem, ans_elem in zip(guess, ans):
         if guess_elem == ans_elem:
             hints.append("B")
-            ans_temp[i] = "USED"
-    for guess_elem, ans_elem in zip(guess, ans_temp):
-        if guess_elem in ans_temp:
-            hints.append("W")
-            ans_temp[ans_temp.index(guess_elem)] = "USED"
+        else:
+            guess_no_match.append(guess_elem)
+            ans_no_match.append(ans_elem)
 
-    random.shuffle(hints)
+    for guess_elem in guess_no_match:
+        if guess_elem in ans_no_match:
+            hints.append("W")
+            ans_no_match.remove(guess_elem)
 
     return hints
 
@@ -36,7 +38,10 @@ while True:
             else:
                 break
 
-        hints = "".join(validate_guess(guess, answer))
+        hints = validate_guess(guess, answer)
+        random.shuffle(hints)
+        hints = "".join(hints)
+
         if hints == "BBBBB":
             print(hints, "\n")
             print(f"You win! Well done! Answer was {answer_str}")

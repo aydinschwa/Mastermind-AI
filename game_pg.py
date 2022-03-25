@@ -1,6 +1,5 @@
 import pygame as pg
 import random
-import itertools
 import sys
 
 pg.init()
@@ -99,22 +98,22 @@ def validate_guess(guess, ans):
     # removes the value from a copy of answer so that nothing is double counted.
     hints = []
     ans_temp = ans.copy()
-    print(guess, ans_temp)
+    guess_temp = guess.copy()
     # first pass for black pegs
-    for i, (guess_elem, ans_elem) in enumerate(zip(guess, ans_temp)):
+    for i, (guess_elem, ans_elem) in enumerate(zip(guess_temp, ans_temp)):
         if guess_elem == ans_elem:
             hints.append("Black")
             ans_temp[i] = ""
+            guess_temp[i] = ""
 
     # second pass for white pegs
-    for guess_elem, ans_elem in zip(guess, ans_temp):
-        if guess_elem in ans_temp:
+    for guess_elem, ans_elem in zip(guess_temp, ans_temp):
+        if guess_elem in ans_temp and guess_elem:
             hints.append("White")
             ans_temp[ans_temp.index(guess_elem)] = ""
-        else:
-            hints.append("")
 
-    random.shuffle(hints)
+    if len(hints) < 5:
+        hints.extend([""] * (5 - len(hints)))
 
     return hints
 
@@ -142,6 +141,7 @@ while True:
                 if CURRENT_HOLE == 5:
                     guess = GUESS_GRID[6 - GUESSES_LEFT]
                     hints = validate_guess(guess, ANSWER)
+                    random.shuffle(hints)
                     HINT_GRID[6 - GUESSES_LEFT] = hints
                     GUESSES_LEFT -= 1
                     CURRENT_HOLE = 0
