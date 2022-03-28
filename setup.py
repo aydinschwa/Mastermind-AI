@@ -11,7 +11,9 @@ SCREEN_HEIGHT = 750
 BACKGROUND = pg.transform.scale(pg.image.load("assets/background.jpg"), (SCREEN_WIDTH, SCREEN_HEIGHT))
 HOLE_BACKGROUND = pg.image.load("assets/peg.png")
 SCREEN = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-GAME_FONT = pg.font.SysFont("Verdana", 15)
+GAME_FONT = pg.font.Font("assets/OstrichSans-Black.otf", 30)
+TITLE_FONT = pg.font.Font("assets/OstrichSans-Black.otf", 100)
+SUB_TITLE_FONT = pg.font.Font("assets/ostrich-regular.ttf", 50)
 
 # game board globals
 GUESS_GRID = [["" for _ in range(5)] for _ in range(6)]
@@ -31,3 +33,6 @@ HINT_COLOR_MAP = {"B": (0, 0, 0),
 
 # game state globals
 ANSWER = random.choices(COLOR_CHOICES, k=5)
+CODEMAKER_ANSWER = ["", "", "", "", ""]
+COMPUTER_GUESSES = ["", "", "", "", ""] * 5
+COMPUTER_HINTS = ["", "", "", "", ""] * 5
