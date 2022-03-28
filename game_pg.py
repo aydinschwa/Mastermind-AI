@@ -7,6 +7,9 @@ class Mastermind:
     def __init__(self):
         self.guesses_left = 6
         self.current_hole = 0
+        self.game_status = "start"
+        self.win_status = None
+
 
     @staticmethod
     def draw_guess_grid(guess_grid, x, y):
@@ -81,7 +84,7 @@ class Mastermind:
             status_rect.center = (SCREEN_WIDTH / 2 + 75, SCREEN_HEIGHT / 2 - 30)
             SCREEN.blit(status_text, status_rect)
 
-            self.draw_button(SCREEN_WIDTH / 2 + 75, SCREEN_HEIGHT / 2 + 75, "EXIT")
+            self.draw_button(SCREEN_WIDTH / 2 + 75, SCREEN_HEIGHT / 2 + 75, "RESET")
 
         if status == "LOSE":
             self.draw_choices(ANSWER, 200, 710)
@@ -97,7 +100,8 @@ class Mastermind:
         self.draw_guess_grid(GUESS_GRID, 200, 65)
         self.draw_hint_grid(HINT_GRID, 55, 35)
         self.draw_separators()
-        self.draw_button(SCREEN_WIDTH / 2 + 70, SCREEN_HEIGHT - 40, "EXIT")
+        self.draw_choices(CODEMAKER_ANSWER, 200, 710)
+        self.draw_button(75, SCREEN_HEIGHT - 40, "RESET")
 
     def draw_codemaker_screen(self):
 
@@ -212,9 +216,20 @@ class Mastermind:
 
         return hints
 
+    def reset_game(self):
+        self.game_status = "start"
+        self.win_status = None
+        self.guesses_left = 6
+        self.current_hole = 0
+        for i in range(6):
+            GUESS_GRID[i] = ["" for _ in range(5)]
+            HINT_GRID[i] = ["" for _ in range(5)]
+            if i < 5:
+                CODEMAKER_ANSWER[i] = ""
+                COMPUTER_GUESSES[i] = ["", "", "", "", ""]
+                COMPUTER_HINTS[i] = ["", "", "", "", ""]
+
     def play(self):
-        game_status = "start"
-        win_status = None
         current_time = pg.time.get_ticks()
         while True:
             for event in pg.event.get():
@@ -224,15 +239,15 @@ class Mastermind:
                 if event.type == pg.MOUSEBUTTONDOWN:
                     mouse_x, mouse_y = pg.mouse.get_pos()
 
-                    if game_status == "start":
+                    if self.game_status == "start":
                         breaker_rect = self.draw_codebreaker()
                         maker_rect = self.draw_codemaker()
                         if breaker_rect.collidepoint(mouse_x, mouse_y):
-                            game_status = "codebreaker"
+                            self.game_status = "codebreaker"
                         elif maker_rect.collidepoint(mouse_x, mouse_y):
-                            game_status = "codemaker"
+                            self.game_status = "codemaker"
 
-                    elif game_status == "codebreaker":
+                    elif self.game_status == "codebreaker":
                         # choosing which colors to play
                         choice_rects = self.draw_choices(COLOR_CHOICES, 200, 710)
                         for color, rect in zip(COLOR_CHOICES, choice_rects):
@@ -253,17 +268,17 @@ class Mastermind:
                                 self.current_hole = 0
 
                                 if guess == ANSWER:
-                                    win_status = "WIN"
+                                    self.win_status = "WIN"
 
                                 elif guess != ANSWER and self.guesses_left == 0:
-                                    win_status = "LOSE"
+                                    self.win_status = "LOSE"
 
-                        if win_status in ("WIN", "LOSE"):
-                            exit_rect = self.draw_button(SCREEN_WIDTH / 2 + 75, SCREEN_HEIGHT / 2 + 75, "EXIT")
+                        if self.win_status in ("WIN", "LOSE"):
+                            exit_rect = self.draw_button(SCREEN_WIDTH / 2 + 75, SCREEN_HEIGHT / 2 + 75, "RESET")
                             if exit_rect.collidepoint(mouse_x, mouse_y):
-                                sys.exit()
+                                self.reset_game()
 
-                    elif game_status == "codemaker":
+                    elif self.game_status == "codemaker":
                         # choosing which colors to play
                         choice_rects = self.draw_choices(COLOR_CHOICES, x=SCREEN_WIDTH / 3.75, y=SCREEN_HEIGHT / 2 + 45)
                         for color, rect in zip(COLOR_CHOICES, choice_rects):
@@ -280,14 +295,14 @@ class Mastermind:
                                 for i, (guess, hint) in enumerate(zip(guesses, hints)):
                                     COMPUTER_GUESSES[i] = guess
                                     COMPUTER_HINTS[i] = hint
-                                game_status = "solver_showcase"
+                                self.game_status = "solver_showcase"
 
-                    elif game_status == "solver_showcase":
-                        exit_rect = self.draw_button(SCREEN_WIDTH / 2 + 70, SCREEN_HEIGHT - 40, "EXIT")
+                    elif self.game_status == "solver_showcase":
+                        exit_rect = self.draw_button(50, SCREEN_HEIGHT - 40, "RESET")
                         if exit_rect.collidepoint(mouse_x, mouse_y):
-                            sys.exit()
+                            self.reset_game()
 
-                if game_status == "codebreaker":
+                if self.game_status == "codebreaker":
                     # changing color choices before submitting
                     if event.type == pg.KEYDOWN:
                         if event.key == pg.K_BACKSPACE:
@@ -295,7 +310,7 @@ class Mastermind:
                                 self.current_hole -= 1
                                 GUESS_GRID[6 - self.guesses_left][self.current_hole] = ""
 
-                elif game_status == "codemaker":
+                elif self.game_status == "codemaker":
                     # changing color choices before submitting
                     if event.type == pg.KEYDOWN:
                         if event.key == pg.K_BACKSPACE:
@@ -304,14 +319,14 @@ class Mastermind:
                                 CODEMAKER_ANSWER[self.current_hole] = ""
 
             SCREEN.blit(BACKGROUND, (0, 0))
-            if game_status == "start":
+            if self.game_status == "start":
                 self.draw_start_screen()
-            elif game_status == "codebreaker":
+            elif self.game_status == "codebreaker":
                 self.draw_codebreaker_screen()
-                self.draw_win_screen(win_status)
-            elif game_status == "codemaker":
+                self.draw_win_screen(self.win_status)
+            elif self.game_status == "codemaker":
                 self.draw_codemaker_screen()
-            elif game_status == "solver_showcase":
+            elif self.game_status == "solver_showcase":
                 self.draw_solver_screen()
                 if pg.time.get_ticks() - current_time > 3000:
                     i = self.current_hole
