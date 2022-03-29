@@ -1,4 +1,6 @@
+import os
 from setup import *
+from dict_maker import build_dict
 from solver import MastermindSolver
 
 
@@ -10,6 +12,10 @@ class Mastermind:
         self.game_status = "start"
         self.win_status = None
 
+        if not os.listdir("stored_objects"):
+            print("Building Guess-Answer Table...")
+            build_dict()
+            print("Guess-Answer Table Complete!")
 
     @staticmethod
     def draw_guess_grid(guess_grid, x, y):
@@ -221,6 +227,7 @@ class Mastermind:
         self.win_status = None
         self.guesses_left = 6
         self.current_hole = 0
+        new_answer = random.choices(COLOR_CHOICES, k=5)
         for i in range(6):
             GUESS_GRID[i] = ["" for _ in range(5)]
             HINT_GRID[i] = ["" for _ in range(5)]
@@ -228,6 +235,7 @@ class Mastermind:
                 CODEMAKER_ANSWER[i] = ""
                 COMPUTER_GUESSES[i] = ["", "", "", "", ""]
                 COMPUTER_HINTS[i] = ["", "", "", "", ""]
+                ANSWER[i] = new_answer[i]
 
     def play(self):
         current_time = pg.time.get_ticks()

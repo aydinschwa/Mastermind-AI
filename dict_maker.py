@@ -24,7 +24,7 @@ def score_guess(guess, ans):
     return "".join(hints)
 
 
-if __name__ == "__main__":
+def build_dict():
     # default dict avoids storing keys as tuple, saves lookup time
     score_dict = collections.defaultdict(dict)
     all_guesses = itertools.product(["R", "G", "B", "Y", "P"], repeat=5)
@@ -37,3 +37,7 @@ if __name__ == "__main__":
     FileStore = open("stored_objects/score_dict.pickle", "wb")
     pickle.dump(score_dict, FileStore)
     FileStore.close()
+
+
+if __name__ == "__main__":
+    build_dict()
