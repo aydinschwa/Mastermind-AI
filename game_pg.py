@@ -336,7 +336,7 @@ class Mastermind:
                 self.draw_codemaker_screen()
             elif self.game_status == "solver_showcase":
                 self.draw_solver_screen()
-                if pg.time.get_ticks() - current_time > 3000:
+                if pg.time.get_ticks() - current_time > 1500:
                     i = self.current_hole
                     if COMPUTER_GUESSES[i]:
                         GUESS_GRID[i] = COMPUTER_GUESSES[i]
