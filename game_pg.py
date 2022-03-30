@@ -1,6 +1,6 @@
 import os
+import pickle
 from setup import *
-from dict_maker import build_dict
 from solver import MastermindSolver
 
 
@@ -12,10 +12,9 @@ class Mastermind:
         self.game_status = "start"
         self.win_status = None
 
-        if not os.listdir("stored_objects"):
-            print("Building Guess-Answer Table...")
-            build_dict()
-            print("Guess-Answer Table Complete!")
+        FileStore = open("stored_objects/win_dict.pickle", "rb")
+        self.lookup_table = pickle.load(FileStore)
+        FileStore.close()
 
     @staticmethod
     def draw_guess_grid(guess_grid, x, y):
@@ -298,11 +297,11 @@ class Mastermind:
                         submit_rect = self.draw_button(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 150, "SUBMIT")
                         if submit_rect.collidepoint(mouse_x, mouse_y):
                             if self.current_hole == 5:
-                                guesses, hints = MastermindSolver("".join(CODEMAKER_ANSWER)).solve()
+                                guesses = self.lookup_table[tuple(CODEMAKER_ANSWER)]
                                 self.current_hole = 0
-                                for i, (guess, hint) in enumerate(zip(guesses, hints)):
+                                for i, guess in enumerate(guesses):
                                     COMPUTER_GUESSES[i] = guess
-                                    COMPUTER_HINTS[i] = hint
+                                    COMPUTER_HINTS[i] = self.validate_guess([let for let in guess], CODEMAKER_ANSWER)
                                 self.game_status = "solver_showcase"
 
                     elif self.game_status == "solver_showcase":

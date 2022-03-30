@@ -1,3 +1,5 @@
 .idea/
 __pycache__/
 stored_objects/score_dict.pickle
+stored_objects/guess_lengths.pickle
+simple_minimax_demo.py
