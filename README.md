@@ -1,6 +1,8 @@
 # Mastermind-Solver
 
-This is a playable implementation of the code-cracking board game Mastermind. For the rules of Mastermind, see this [Wikihow article](https://www.wikihow.com/Play-Mastermind). This Mastermind board is different from the typical one since it has 5 holes and 5 colors, giving 3,125 possible combinations. The original Mastermind board has 4 holes and 6 colors, giving 1,296 possible combinations. I made this change since the physical Mastermind game I own has 5 holes and 5 colors.
+This is a playable implementation of the code-cracking board game Mastermind. For a full explanation of this project, see this [writeup on Medium](https://medium.com/@aydinschwa/solving-mastermind-641411708d01).
+
+For the rules of Mastermind, see this [Wikihow article](https://www.wikihow.com/Play-Mastermind). This Mastermind board is different from the typical one since it has 5 holes and 5 colors, giving 3,125 possible combinations. The original Mastermind board has 4 holes and 6 colors, giving 1,296 possible combinations. I made this change since the physical Mastermind game I own has 5 holes and 5 colors.
 
 
 <p align="center">
