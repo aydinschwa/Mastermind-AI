@@ -1,4 +1,4 @@
-# Mastermind-Solver
+# Mastermind-AI
 
 This is a playable implementation of the code-cracking board game Mastermind. For a full explanation of this project, see this [writeup on Medium](https://medium.com/@aydinschwa/solving-mastermind-641411708d01).
 
